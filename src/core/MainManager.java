@@ -5,15 +5,20 @@
  */
 package core;
 
+import com.nakpil.Class.DataBridge;
+import java.io.File;
+
 /**
  *
  * @author HERU
  */
 public class MainManager {
 
-    /**
-     * @param args the command line arguments
-     */
+    public static final String ConfigFile = System.getProperty("user.home")+File.separator+"Nakpil Softwares"+File.separator+"BIR Alphalist"+File.separator+"Config.def";
+    public static DataManager DATAMAN;
+    public static DataBridge TUNNEL;
+    public static File ConfigXML;
+    
     public static void main(String[] args) {
         
     }

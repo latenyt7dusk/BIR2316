@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.nakpil;
-
+package com.nakpil.StringUtils;
 
 /**
- *
- * @author tibo
+ * Normalized string similarities return a similarity between 0.0 and 1.0.
+ * 
+ * @author Thibault Debatty
  */
-public interface NormalizedStringSimilarity extends StringSimilarity {
+public interface NormalizedStringDistance extends StringDistance {
     
 }

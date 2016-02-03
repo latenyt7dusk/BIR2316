@@ -1,4 +1,4 @@
-package com.nakpil;
+package com.nakpil.StringUtils;
 
 import java.util.Arrays;
 
