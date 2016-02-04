@@ -21,6 +21,7 @@ public class Employee {
     private String Status;
     private String Birth;
     private String Contact;
+    private String Address;
     private List<Dependent> Deps = new ArrayList();
     
     public static final String TABLE = "PROFILES";
@@ -32,6 +33,7 @@ public class Employee {
     public static final String CIVILSTATUS = "STATUS";
     public static final String BIRTHDATE = "BIRTH";
     public static final String CONTACT = "CONTACT";
+    public static final String ADDRESS = "ADDRESS";
     
     public Employee(String trace){
         this.TRACE_ID = trace;
@@ -63,6 +65,10 @@ public class Employee {
     
     public void setContact(String s){
         this.Contact = s;
+    }
+    
+    public void setAddress(String s){
+        this.Address = s;
     }
     
     public String getTraceID(){
@@ -97,12 +103,22 @@ public class Employee {
         return Contact;
     }
     
+    public String getAddress(){
+        return Address;
+    }
+    
     public void setDependents(List<Dependent> d){
         this.Deps = d;
     }
     
     public void addDependent(Dependent d){
         this.Deps.add(d);
+    }
+    
+    public String getEntry(){
+        return "INSERT INTO "+TABLE+" VALUES("+this.TRACE_ID+","+this.TIN_ID+","+this.Surname+","
+                +this.Firstname+","+this.Middlename+","+this.Status+","+this.Birth+","+this.Contact
+                +","+this.Address+")";
     }
     
 }

@@ -9,11 +9,9 @@ import com.nakpil.Class.DataBridge;
 import com.nakpil.Class.Dependent;
 import com.nakpil.Class.Employee;
 import com.nakpil.Class.Log;
-import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +23,12 @@ public class DataManager {
     
     private final DataBridge DB;
     private List<String> TMP_QUERYLIST;
+   
     
+    
+    public DataManager(){
+        this(null);
+    }
     
     public DataManager(DataBridge db){
         this.DB = db;
@@ -36,7 +39,7 @@ public class DataManager {
             String emp_Table = "CREATE TABLE IF NOT EXISTS "+Employee.TABLE+"("+Employee.TRACE+" VARCHAR(255),"
                 +Employee.TIN+" VARCHAR(255),"+Employee.SURNAME+" VARCHAR(255),"+Employee.FIRSTNAME+" VARCHAR(255),"
                 +Employee.MIDDLENAME+" VARCHAR(255),"+Employee.CIVILSTATUS+" VARCHAR(255),"+Employee.BIRTHDATE+" DATE,"
-                +Employee.CONTACT+" VARCHAR(255))";
+                +Employee.CONTACT+" VARCHAR(255),"+Employee.ADDRESS+" VARCHAR(255))";
             String dep_Table = "CREATE TABLE IF NOT EXISTS "+Dependent.TABLE+"("+Dependent.TRACE+" VARCHAR(255),"
                 +Dependent.NAME+" VARCHAR(255),"+Dependent.BIRTHDATE+" DATE)";
             String log_Table = "CREATE TABLE IF NOT EXISTS "+Log.TABLE+"("+Log.TRACE+" VARCHAR(255),"
@@ -45,7 +48,7 @@ public class DataManager {
             TMP_QUERYLIST.add(emp_Table);
             TMP_QUERYLIST.add(dep_Table);
             TMP_QUERYLIST.add(log_Table);
-            DB.RunBatchData(TMP_QUERYLIST);
+            System.out.println(DB.RunBatchScript(TMP_QUERYLIST));
         }catch(Exception er){
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, er);
         }
@@ -99,7 +102,7 @@ public class DataManager {
             TMP_QUERYLIST = new ArrayList();
             TMP_QUERYLIST.add(Eq);
             TMP_QUERYLIST.add(Dq);
-            return DB.RunBatchData(TMP_QUERYLIST);
+            return DB.RunBatchScript(TMP_QUERYLIST);
         }catch(Exception er){
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, er);
             return false;
@@ -116,35 +119,7 @@ public class DataManager {
         }
     }
     
-    public Properties getConfig(){
-        try{
-            
-            return new Properties();
-        }catch(Exception ex){
-             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
     
-    public void defaultConfig(){
-        try{
-            
-        }catch(Exception ex){
-             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void createDefaultConfig(){
-        try{
-            File config = new File(MainManager.ConfigFile);
-            if(!config.exists()){
-                config.createNewFile();
-                
-            }
-        }catch(Exception ex){
-             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
     
 }

@@ -36,7 +36,7 @@ import org.apache.commons.codec.binary.Base64;
  *
  * @author Kelvin Nakpil
  */
-public class Cryptography {
+public class Cryptographer {
 
     public static void main(String args[]) throws UnsupportedEncodingException {
         System.out.println(EncryptText("test", "dwr2rufd7ezj"));

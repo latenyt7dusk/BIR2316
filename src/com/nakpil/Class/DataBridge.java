@@ -57,7 +57,7 @@ public class DataBridge {
     public final static int MSSQL = 2;
     public final static int H2 = 3;
 
-    private final String DEFAULT = "jdbc:h2:tcp://localhost/~/Nakpil Softwares/System/database";
+    public static final String DEFAULT = "jdbc:h2:tcp://localhost/~/Nakpil Softwares/BIR Alphalist/database";
 
     private static final String DRIVER[] = {"sun.jdbc.odbc.JdbcOdbcDriver", "com.mysql.jdbc.Driver",
         "com.microsoft.sqlserver.jdbc.SQLServerDriver", "org.h2.Driver"};
@@ -189,13 +189,36 @@ public class DataBridge {
         }
     }
     
+    public boolean hasDuplicate(String TB,String Col,String val) throws SQLException{
+        try {
+            if (CONNECTION == null) {
+                Class.forName(DRIVER[TYPE]);
+                this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
+                this.PREPAREDST = CONNECTION.prepareStatement("SELECT "+Col+" FROM " + TB +" WHERE "+Col+"='"+val+"'");
+                this.RESULTS = PREPAREDST.executeQuery();
+                return RESULTS.next();
+            }
+            return false;
+        } catch (SQLException | ClassNotFoundException er) {
+            return false;
+        } finally {
+            if (CONNECTION != null) {
+                RESULTS.close();
+                PREPAREDST.close();
+                CONNECTION.close();
+                this.CONNECTION = null;
+                System.gc();
+            }
+        }
+    }
+    
     public boolean AddData(String TB, List<String> data) throws SQLException {
         try {
             if (CONNECTION == null) {
                 Class.forName(DRIVER[TYPE]);
                 this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
                 STATEMENT = CONNECTION.createStatement();
-
+                
                 ST = "INSERT INTO " + TB + " values('" + data.get(0) + "'";
                 for (int i = 1; i < data.size(); i++) {
                     ST = ST.concat(",'" + data.get(i) + "'");
@@ -239,7 +262,7 @@ public class DataBridge {
         }
     }
 
-    public boolean RunBatchData(List<String> d) throws SQLException {
+    public boolean RunBatchScript(List<String> d) throws SQLException {
         try {
             if (CONNECTION == null) {
                 Class.forName(DRIVER[TYPE]);
@@ -257,6 +280,7 @@ public class DataBridge {
             }
             return false;
         } catch (SQLException | ClassNotFoundException er) {
+            er.printStackTrace();
             return false;
         } finally {
             if (CONNECTION != null) {

@@ -5,12 +5,21 @@
  */
 package core;
 
+import com.nakpil.Class.Employee;
+import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import utility.Cryptographer;
 
 /**
  *
@@ -20,6 +29,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     public static final GraphicsEnvironment GEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
     public static final Rectangle MaxBounds = GEnvironment.getMaximumWindowBounds().getBounds();
+    private Component[] TEMP_COMPONENTS;
+    private boolean empLock;
+    private Employee TEMP_EMP;
 
     /**
      * Creates new form MainFrame
@@ -27,6 +39,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         MaximizeUsableBounds();
+        LockEmployeeEntry(false);
     }
 
     private void MaximizeUsableBounds() {
@@ -42,6 +55,74 @@ public class MainFrame extends javax.swing.JFrame {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void LockEmployeeEntry(boolean b) {
+        try {
+            TEMP_COMPONENTS = jPanel3.getComponents();
+            if (empLock) {
+                for (Component e : TEMP_COMPONENTS) {
+                    if (e instanceof JTextField) {
+                        ((JTextField) e).setEnabled(false);
+                    }
+                    if (e instanceof JFormattedTextField) {
+                        ((JFormattedTextField) e).setEnabled(false);
+                    }
+                    if (e instanceof JComboBox) {
+                        ((JComboBox) e).setEnabled(false);
+                    }
+                    if (e instanceof JButton) {
+                        ((JButton) e).setEnabled(false);
+                    }
+                }
+            } else {
+                for (Component e : TEMP_COMPONENTS) {
+                    if (e instanceof JTextField) {
+                        ((JTextField) e).setEnabled(true);
+                    }
+                    if (e instanceof JFormattedTextField) {
+                        ((JFormattedTextField) e).setEnabled(true);
+                    }
+                    if (e instanceof JComboBox) {
+                        ((JComboBox) e).setEnabled(true);
+                    }
+                    if (e instanceof JButton) {
+                        ((JButton) e).setEnabled(true);
+                    }
+                }
+            }
+            empLock = b;
+        } catch (Exception er) {
+            Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, er);
+        }
+    }
+    public void clearEmployeeEntry() {
+        TEMP_COMPONENTS = jPanel3.getComponents();
+        for (Component e : TEMP_COMPONENTS) {
+            if (e instanceof JTextField) {
+                ((JTextField) e).setText("");
+            }
+            if (e instanceof JFormattedTextField) {
+                ((JFormattedTextField) e).setText("");
+            }
+            if (e instanceof JComboBox) {
+                ((JComboBox) e).setSelectedIndex(0);
+            }
+        }
+    }
+    public void saveEmployeeEntry(){
+        try{
+            
+            TEMP_EMP = new Employee(Cryptographer.getNewID("E"));
+            TEMP_EMP.setTIN(jFormattedTextField1.getText());
+            if(MainManager.TUNNEL.hasDuplicate(Employee.TABLE, Employee.TIN, TEMP_EMP.getTIN())){
+                JOptionPane.showMessageDialog(this, "Duplicate TIN");
+            }else{
+                JOptionPane.showMessageDialog(this, "NO Duplicate TIN");
+            }
+        }catch(Exception er){
+            Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, er);
         }
     }
 
@@ -104,6 +185,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
+        jButton16 = new javax.swing.JButton();
         SCHED_PANEL = new javax.swing.JPanel();
         vHolderPanel1 = new utility.VHolderPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -232,7 +314,6 @@ public class MainFrame extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/core/Nakpil Softwares LOGO.png")));
         setMaximumSize(new java.awt.Dimension(802, 590));
         setMinimumSize(new java.awt.Dimension(802, 590));
-        setPreferredSize(new java.awt.Dimension(802, 590));
 
         Main_Panel.setBackground(new java.awt.Color(153, 153, 153));
         Main_Panel.setOpaque(true);
@@ -241,10 +322,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "TIN", "Name", "Status", "Contact", "Birthdate", "Address"
@@ -283,7 +361,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField2.setMaximumSize(new java.awt.Dimension(200, 20));
 
         try {
-            jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-##-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -313,6 +391,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButton5.setText("Save");
         jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton5.setEnabled(false);
+        jButton5.setFocusPainted(false);
         jButton5.setOpaque(false);
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,7 +421,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel12.setText("Address");
 
         try {
-            jFormattedTextField6.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            jFormattedTextField6.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-##-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -376,7 +455,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField11.setMaximumSize(new java.awt.Dimension(200, 20));
 
         try {
-            jFormattedTextField7.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            jFormattedTextField7.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-##-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -393,7 +472,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField12.setMaximumSize(new java.awt.Dimension(200, 20));
 
         try {
-            jFormattedTextField8.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            jFormattedTextField8.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-##-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -410,7 +489,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField13.setMaximumSize(new java.awt.Dimension(200, 20));
 
         try {
-            jFormattedTextField9.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            jFormattedTextField9.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-##-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -423,6 +502,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButton6.setText("Logs");
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton6.setEnabled(false);
+        jButton6.setFocusPainted(false);
         jButton6.setOpaque(false);
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -433,6 +513,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButton15.setText("Add Dependent");
         jButton15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton15.setEnabled(false);
+        jButton15.setFocusPainted(false);
         jButton15.setOpaque(false);
         jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -608,6 +689,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jButton1.setText("Search");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setFocusPainted(false);
         jButton1.setOpaque(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -617,6 +699,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jButton2.setText("Add");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setFocusPainted(false);
         jButton2.setOpaque(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -626,6 +709,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jButton3.setText("Import");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setFocusPainted(false);
         jButton3.setOpaque(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -635,6 +719,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jButton4.setText("Export");
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton4.setFocusPainted(false);
         jButton4.setOpaque(false);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -644,6 +729,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jButton7.setText("View ALL");
         jButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton7.setFocusPainted(false);
         jButton7.setOpaque(false);
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -658,6 +744,16 @@ public class MainFrame extends javax.swing.JFrame {
         jProgressBar1.setPreferredSize(new java.awt.Dimension(146, 22));
         jPanel4.add(jProgressBar1);
 
+        jButton16.setText("Update");
+        jButton16.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton16.setFocusPainted(false);
+        jButton16.setOpaque(false);
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout EMP_PANELLayout = new javax.swing.GroupLayout(EMP_PANEL);
         EMP_PANEL.setLayout(EMP_PANELLayout);
         EMP_PANELLayout.setHorizontalGroup(
@@ -670,6 +766,8 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EMP_PANELLayout.createSequentialGroup()
                         .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -696,9 +794,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jButton3)
                     .addComponent(jButton4)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7))
+                    .addComponent(jButton7)
+                    .addComponent(jButton16))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1739,6 +1838,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        clearEmployeeEntry();
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -1751,8 +1852,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, AlphaSpacesOnly(jTextField6.getText()));
-        
+        saveEmployeeEntry();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -1775,7 +1875,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
+        System.out.println(((jFormattedTextField2.getText().equals("  /  /    ")) ? "Invalid" : "Valid"));
     }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton16ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1824,6 +1929,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
+    private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
