@@ -116,9 +116,9 @@ public class Employee {
     }
     
     public String getEntry(){
-        return "INSERT INTO "+TABLE+" VALUES("+this.TRACE_ID+","+this.TIN_ID+","+this.Surname+","
-                +this.Firstname+","+this.Middlename+","+this.Status+","+this.Birth+","+this.Contact
-                +","+this.Address+")";
+        return "INSERT INTO "+TABLE+" VALUES('"+this.TRACE_ID+"','"+this.TIN_ID+"','"+this.Surname+"','"
+                +this.Firstname+"','"+this.Middlename+"','"+this.Status+"','"+this.Birth+"','"+this.Contact
+                +"','"+this.Address+"')";
     }
     
 }

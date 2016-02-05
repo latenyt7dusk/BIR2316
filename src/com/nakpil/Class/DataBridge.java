@@ -35,7 +35,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -316,32 +315,6 @@ public class DataBridge {
             return false;
         } finally {
             if (CONNECTION != null) {
-                CONNECTION.close();
-                this.CONNECTION = null;
-                System.gc();
-            }
-        }
-    }
-
-    public boolean hasRecord(String TB, String idLb, String val) throws SQLException {
-        try {
-            if (CONNECTION == null) {
-                Class.forName(DRIVER[TYPE]);
-                this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
-                this.PREPAREDST = CONNECTION.prepareStatement("SELECT * FROM " + TB + " WHERE " + idLb + " = '" + val + "'");
-                this.RESULTS = PREPAREDST.executeQuery();
-                while (RESULTS.next()) {
-                    return true;
-                }
-
-            }
-            return false;
-        } catch (ClassNotFoundException | SQLException er) {
-            return false;
-        } finally {
-            if (CONNECTION != null) {
-                RESULTS.close();
-                PREPAREDST.close();
                 CONNECTION.close();
                 this.CONNECTION = null;
                 System.gc();

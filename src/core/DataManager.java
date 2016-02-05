@@ -10,6 +10,7 @@ import com.nakpil.Class.Dependent;
 import com.nakpil.Class.Employee;
 import com.nakpil.Class.Log;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,8 +24,12 @@ public class DataManager {
     
     private final DataBridge DB;
     private List<String> TMP_QUERYLIST;
-   
     
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DEFAULT_TIME_FORMAT = "hh:mm:ss";
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+    public static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
+   
     
     public DataManager(){
         this(null);
@@ -79,16 +84,7 @@ public class DataManager {
     //EMPLOYEE DATA MANAGEMENT
     public boolean saveNewEmployee(Employee e){
         try{
-            TMP_QUERYLIST = new ArrayList();
-            TMP_QUERYLIST.add(e.getTraceID());
-            TMP_QUERYLIST.add(e.getTIN());
-            TMP_QUERYLIST.add(e.getSurname());
-            TMP_QUERYLIST.add(e.getFirstname());
-            TMP_QUERYLIST.add(e.getMiddlename());
-            TMP_QUERYLIST.add(e.getStatus());
-            TMP_QUERYLIST.add(e.getBirthDate());
-            TMP_QUERYLIST.add(e.getContact());
-            return DB.AddData(Employee.TABLE, TMP_QUERYLIST);
+            return DB.RunScript(e.getEntry());
         }catch(Exception er){
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, er);
             return false;
