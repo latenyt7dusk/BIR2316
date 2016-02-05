@@ -115,6 +115,10 @@ public class Employee {
         this.Deps.add(d);
     }
     
+    public List<Dependent> getDependents(){
+        return Deps;
+    }
+    
     public String getEntry(){
         return "INSERT INTO "+TABLE+" VALUES('"+this.TRACE_ID+"','"+this.TIN_ID+"','"+this.Surname+"','"
                 +this.Firstname+"','"+this.Middlename+"','"+this.Status+"','"+this.Birth+"','"+this.Contact

@@ -44,5 +44,9 @@ public class Dependent {
         return Birth;
     }
     
+    public String getEntry(){
+        return "INSERT INTO "+TABLE+" VALUES('"+TRACE_ID+"','"+Name+"','"+Birth+"')";
+    }
+    
     
 }

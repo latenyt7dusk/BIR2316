@@ -84,6 +84,14 @@ public class DataManager {
     //EMPLOYEE DATA MANAGEMENT
     public boolean saveNewEmployee(Employee e){
         try{
+            if(e.getDependents().size() > 0){
+                TMP_QUERYLIST = new ArrayList();
+                for(int i = 0;i < e.getDependents().size();i++){
+                    TMP_QUERYLIST.add(e.getDependents().get(i).getEntry());
+                }
+                TMP_QUERYLIST.add(e.getEntry());
+                return DB.RunBatchScript(TMP_QUERYLIST);
+            }
             return DB.RunScript(e.getEntry());
         }catch(Exception er){
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, er);

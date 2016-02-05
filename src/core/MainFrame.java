@@ -142,18 +142,38 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
     
-    public List<Dependent> buildDependents(List e){
+    public void buildDependents(List<Dependent> e,Employee emp){
         try{
             String N1 = D1_F.getText().toUpperCase();
             String N2 = D2_F.getText().toUpperCase();
             String N3 = D3_F.getText().toUpperCase();
             String N4 = D4_F.getText().toUpperCase();
-            
-            
-            return e;
+            if(!N1.isEmpty()){
+                Dependent D1 = new Dependent(emp.getTraceID());
+                D1.setName(N1);
+                D1.setBirthDate(DataManager.DATE_FORMATTER.format(D1_DOB_F.getValue()));
+                e.add(D1);
+            }
+            if(!N2.isEmpty()){
+                Dependent D2 = new Dependent(emp.getTraceID());
+                D2.setName(N2);
+                D2.setBirthDate(DataManager.DATE_FORMATTER.format(D2_DOB_F.getValue()));
+                e.add(D2);
+            }
+            if(!N3.isEmpty()){
+                Dependent D3 = new Dependent(emp.getTraceID());
+                D3.setName(N3);
+                D3.setBirthDate(DataManager.DATE_FORMATTER.format(D3_DOB_F.getValue()));
+                e.add(D3);
+            }
+            if(!N4.isEmpty()){
+                Dependent D4 = new Dependent(emp.getTraceID());
+                D4.setName(N4);
+                D4.setBirthDate(DataManager.DATE_FORMATTER.format(D1_DOB_F.getValue()));
+                e.add(D4);
+            }          
         }catch(Exception er){
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, er);
-            return new ArrayList();
         }
     }
 
@@ -192,7 +212,8 @@ public class MainFrame extends javax.swing.JFrame {
                         TEMP_EMP.setBirth(Dob);
                         
                         TEMP_LIST = new ArrayList();
-                        
+                        buildDependents(TEMP_LIST,TEMP_EMP);
+                        TEMP_EMP.setDependents(TEMP_LIST);
                         return TEMP_EMP;
                     }
                 }
