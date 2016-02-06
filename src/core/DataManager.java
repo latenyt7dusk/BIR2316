@@ -25,11 +25,12 @@ public class DataManager {
     private final DataBridge DB;
     private List<String> TMP_QUERYLIST;
     
+    
     public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
     public static final String DEFAULT_TIME_FORMAT = "hh:mm:ss";
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
     public static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
-   
+    
     
     public DataManager(){
         this(null);
