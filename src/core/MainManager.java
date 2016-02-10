@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,11 +42,11 @@ public class MainManager {
             if (Props.getProperty("Server").isEmpty()) {
                 LocalServer = org.h2.tools.Server.createTcpServer();
                 LocalServer.start();
-                TUNNEL = new DataBridge(Props.getProperty("Local"), Props.getProperty("User"), Props.getProperty("Password"), 3);
+                TUNNEL = new DataBridge(Props.getProperty("Local"), Props.getProperty("User"), Props.getProperty("Password"), DataBridge.H2);
                 DATAMAN = new DataManager(TUNNEL);
                 DATAMAN.loadDefaults();
             } else {
-                TUNNEL = new DataBridge(Props.getProperty("Server"), Props.getProperty("User"), Props.getProperty("Password"), 3);
+                TUNNEL = new DataBridge(Props.getProperty("Server"), Props.getProperty("User"), Props.getProperty("Password"), DataBridge.H2);
                 DATAMAN = new DataManager(TUNNEL);
             }
             
@@ -56,20 +57,13 @@ public class MainManager {
                         break;
                     }
                 }
-            } catch (ClassNotFoundException ex) {
-                java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
                 java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-            TUNNEL.advancedPreparedInsert();
             MainFrame MF = new MainFrame();
             MF.setVisible(true);
 
-        } catch (Exception ex) {
+        } catch (IOException | SQLException ex) {
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -88,7 +82,7 @@ public class MainManager {
                 createDefaultConfig();
                 return Props;
             }
-        } catch (Exception ex) {
+        } catch (IOException | Cryptographer.CryptoException ex) {
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } finally {
@@ -117,7 +111,7 @@ public class MainManager {
                 Props.save(OutStream, "");
                 Cryptographer.encrypt(Cryptographer.KEYPASS, FILE_HOLDER, TEMP_FILE);
             }
-        } catch (Exception ex) {
+        } catch (IOException | Cryptographer.CryptoException ex) {
             Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (OutStream != null) {

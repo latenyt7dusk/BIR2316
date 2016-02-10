@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import javax.imageio.ImageIO;
 
 /**
@@ -213,6 +214,36 @@ public class DataBridge {
             
             return true;
         }catch(Exception er){
+            System.out.println(er);
+            return false;
+        } finally {
+            if (CONNECTION != null) {
+                PREPAREDST.close();
+                CONNECTION.close();
+                this.CONNECTION = null;
+                System.gc();
+            }
+        }
+    }
+    
+    public boolean advancedPreparedInsert(String st,Map<String,List<String>> data) throws SQLException{
+        try{
+            if (CONNECTION == null) {
+                Class.forName(DRIVER[TYPE]);
+                this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
+                this.PREPAREDST = CONNECTION.prepareStatement(st);
+                Set<String> keys = data.keySet();
+                for(String k:keys){
+                    Data = data.get(k);
+                    for(int i = 0;i < Data.size();i++){
+                        this.PREPAREDST.setString(i+1, Data.get(i));
+                    }
+                    this.PREPAREDST.addBatch();
+                }
+                return true;
+            }
+            return false;
+        }catch(ClassNotFoundException | SQLException er){
             System.out.println(er);
             return false;
         } finally {
