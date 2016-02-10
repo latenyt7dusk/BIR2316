@@ -188,6 +188,43 @@ public class DataBridge {
         }
     }
     
+    public boolean advancedPreparedInsert() throws SQLException{
+        try{
+            if (CONNECTION == null) {
+                Class.forName(DRIVER[TYPE]);
+                this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
+                this.PREPAREDST = CONNECTION.prepareStatement("INSERT INTO "+Employee.TABLE+"("+Employee.TRACE+","+Employee.TIN+","+Employee.SURNAME+","+Employee.FIRSTNAME+","+Employee.MIDDLENAME+","+Employee.CIVILSTATUS+","+Employee.BIRTHDATE+","+Employee.CONTACT+","+Employee.ADDRESS+") VALUES "+
+                        "(?,?,?,?,?,?,?,?,?)");
+                for(int i = 0; i <= 10000;i++){
+                    this.PREPAREDST.setString(1, String.valueOf(i));
+                    this.PREPAREDST.setString(2, "0000"+String.valueOf(i));
+                    this.PREPAREDST.setString(3, "Test Surname");
+                    this.PREPAREDST.setString(4, "Test Firstname");
+                    this.PREPAREDST.setString(5, "Test Middlename");
+                    this.PREPAREDST.setString(6, "Single");
+                    this.PREPAREDST.setString(7, "2015-02-10");
+                    this.PREPAREDST.setString(8, "09055550830");
+                    this.PREPAREDST.setString(9, "Naic Cavite");
+                    this.PREPAREDST.addBatch();
+                }
+                this.PREPAREDST.executeBatch();
+                System.out.print("Entered");
+            }
+            
+            return true;
+        }catch(Exception er){
+            System.out.println(er);
+            return false;
+        } finally {
+            if (CONNECTION != null) {
+                PREPAREDST.close();
+                CONNECTION.close();
+                this.CONNECTION = null;
+                System.gc();
+            }
+        }
+    }
+    
     public boolean hasDuplicate(String TB,String Col,String val) throws SQLException{
         try {
             if (CONNECTION == null) {

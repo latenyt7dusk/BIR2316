@@ -65,7 +65,7 @@ public class MainManager {
             } catch (javax.swing.UnsupportedLookAndFeelException ex) {
                 java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-
+            TUNNEL.advancedPreparedInsert();
             MainFrame MF = new MainFrame();
             MF.setVisible(true);
 
