@@ -43,7 +43,7 @@ public class DataManager {
     public void loadDefaults(){
         try{
             String emp_Table = "CREATE TABLE IF NOT EXISTS "+Employee.TABLE+"("+Employee.TRACE+" VARCHAR(255),"
-                +Employee.TIN+" VARCHAR(255),"+Employee.SURNAME+" VARCHAR(255),"+Employee.FIRSTNAME+" VARCHAR(255),"
+                +Employee.TIN+" VARCHAR(255),"+Employee.SSS+" VARCHAR(255),"+Employee.SURNAME+" VARCHAR(255),"+Employee.FIRSTNAME+" VARCHAR(255),"
                 +Employee.MIDDLENAME+" VARCHAR(255),"+Employee.CIVILSTATUS+" VARCHAR(255),"+Employee.BIRTHDATE+" DATE,"
                 +Employee.CONTACT+" VARCHAR(255),"+Employee.ADDRESS+" VARCHAR(255))";
             String dep_Table = "CREATE TABLE IF NOT EXISTS "+Dependent.TABLE+"("+Dependent.TRACE+" VARCHAR(255),"
@@ -63,7 +63,7 @@ public class DataManager {
     public boolean createEmployeeTable(){
         try {
             return  DB.RunScript("CREATE TABLE IF NOT EXISTS "+Employee.TABLE+"("+Employee.TRACE+" VARCHAR(255),"
-                    +Employee.TIN+" VARCHAR(255),"+Employee.SURNAME+" VARCHAR(255),"+Employee.FIRSTNAME+" VARCHAR(255),"
+                    +Employee.TIN+" VARCHAR(255),"+Employee.SSS+" VARCHAR(255),"+Employee.SURNAME+" VARCHAR(255),"+Employee.FIRSTNAME+" VARCHAR(255),"
                     +Employee.MIDDLENAME+" VARCHAR(255),"+Employee.CIVILSTATUS+" VARCHAR(255),"+Employee.BIRTHDATE+" DATE,"
                     +Employee.CONTACT+" VARCHAR(255))");
         } catch (SQLException ex) {

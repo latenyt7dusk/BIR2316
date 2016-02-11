@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,6 +67,7 @@ public class DataBridge {
     private PreparedStatement PREPAREDST;
     private ResultSet RESULTS;
     private java.sql.Statement STATEMENT;
+    private DatabaseMetaData DBMETA;
     private ByteArrayOutputStream output;
     private List<List> record;
     private List<String> Data;
@@ -76,7 +78,7 @@ public class DataBridge {
     private BufferedImage BUFFERED_IMAGE_2;
     private BufferedImage BUFFERED_IMAGE_1;
     private Graphics2D GRAPHICS_2D;
-    private Map<String,Map<String,String>> COLLECTION;
+    private Map<String, Map<String, String>> COLLECTION;
 
     public DataBridge(Properties p) {
         this(p.getProperty("DATA_SOURCE"), p.getProperty("USER"),
@@ -119,6 +121,33 @@ public class DataBridge {
         }
     }
 
+    public boolean checkTable(String s) throws SQLException {
+        
+        try {
+            if (CONNECTION == null) {
+                Class.forName(DRIVER[TYPE]);
+                this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);               
+                this.DBMETA = this.CONNECTION.getMetaData();
+                this.RESULTS = DBMETA.getTables(null, null, "%", null);
+                while (RESULTS.next()) {
+                    if(RESULTS.getString(3).equals(s)){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } catch (SQLException | ClassNotFoundException er) {
+            return false;
+        } finally {
+            if (CONNECTION != null) {
+                RESULTS.close();
+                CONNECTION.close();
+                this.CONNECTION = null;
+                System.gc();
+            }
+        }
+    }
+
     public List<List> FetchTableCollection(String TB) throws SQLException {
         try {
             if (CONNECTION == null) {
@@ -153,13 +182,13 @@ public class DataBridge {
             }
         }
     }
-    
-    public List<List> FetchTableCollection(String TB,String LB,String key) throws SQLException {
+
+    public List<List> FetchTableCollection(String TB, String LB, String key) throws SQLException {
         try {
             if (CONNECTION == null) {
                 Class.forName(DRIVER[TYPE]);
                 this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
-                this.PREPAREDST = CONNECTION.prepareStatement("SELECT * FROM " + TB +" WHERE "+LB+"='"+key+"'");
+                this.PREPAREDST = CONNECTION.prepareStatement("SELECT * FROM " + TB + " WHERE " + LB + "='" + key + "'");
                 this.RESULTS = PREPAREDST.executeQuery();
 
                 record = new ArrayList();
@@ -188,17 +217,17 @@ public class DataBridge {
             }
         }
     }
-    
-    public boolean advancedPreparedInsert() throws SQLException{
-        try{
+
+    public boolean advancedPreparedInsert() throws SQLException {
+        try {
             if (CONNECTION == null) {
                 Class.forName(DRIVER[TYPE]);
                 this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
-                this.PREPAREDST = CONNECTION.prepareStatement("INSERT INTO "+Employee.TABLE+"("+Employee.TRACE+","+Employee.TIN+","+Employee.SURNAME+","+Employee.FIRSTNAME+","+Employee.MIDDLENAME+","+Employee.CIVILSTATUS+","+Employee.BIRTHDATE+","+Employee.CONTACT+","+Employee.ADDRESS+") VALUES "+
-                        "(?,?,?,?,?,?,?,?,?)");
-                for(int i = 0; i <= 10000;i++){
+                this.PREPAREDST = CONNECTION.prepareStatement("INSERT INTO " + Employee.TABLE + "(" + Employee.TRACE + "," + Employee.TIN + "," + Employee.SURNAME + "," + Employee.FIRSTNAME + "," + Employee.MIDDLENAME + "," + Employee.CIVILSTATUS + "," + Employee.BIRTHDATE + "," + Employee.CONTACT + "," + Employee.ADDRESS + ") VALUES "
+                        + "(?,?,?,?,?,?,?,?,?)");
+                for (int i = 0; i <= 10000; i++) {
                     this.PREPAREDST.setString(1, String.valueOf(i));
-                    this.PREPAREDST.setString(2, "0000"+String.valueOf(i));
+                    this.PREPAREDST.setString(2, "0000" + String.valueOf(i));
                     this.PREPAREDST.setString(3, "Test Surname");
                     this.PREPAREDST.setString(4, "Test Firstname");
                     this.PREPAREDST.setString(5, "Test Middlename");
@@ -211,9 +240,9 @@ public class DataBridge {
                 this.PREPAREDST.executeBatch();
                 System.out.print("Entered");
             }
-            
+
             return true;
-        }catch(Exception er){
+        } catch (Exception er) {
             System.out.println(er);
             return false;
         } finally {
@@ -225,25 +254,25 @@ public class DataBridge {
             }
         }
     }
-    
-    public boolean advancedPreparedInsert(String st,Map<String,List<String>> data) throws SQLException{
-        try{
+
+    public boolean advancedPreparedInsert(String st, Map<String, List<String>> data) throws SQLException {
+        try {
             if (CONNECTION == null) {
                 Class.forName(DRIVER[TYPE]);
                 this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
                 this.PREPAREDST = CONNECTION.prepareStatement(st);
                 Set<String> keys = data.keySet();
-                for(String k:keys){
+                for (String k : keys) {
                     Data = data.get(k);
-                    for(int i = 0;i < Data.size();i++){
-                        this.PREPAREDST.setString(i+1, Data.get(i));
+                    for (int i = 0; i < Data.size(); i++) {
+                        this.PREPAREDST.setString(i + 1, Data.get(i));
                     }
                     this.PREPAREDST.addBatch();
                 }
                 return true;
             }
             return false;
-        }catch(ClassNotFoundException | SQLException er){
+        } catch (ClassNotFoundException | SQLException er) {
             System.out.println(er);
             return false;
         } finally {
@@ -255,13 +284,13 @@ public class DataBridge {
             }
         }
     }
-    
-    public boolean hasDuplicate(String TB,String Col,String val) throws SQLException{
+
+    public boolean hasDuplicate(String TB, String Col, String val) throws SQLException {
         try {
             if (CONNECTION == null) {
                 Class.forName(DRIVER[TYPE]);
                 this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
-                this.PREPAREDST = CONNECTION.prepareStatement("SELECT "+Col+" FROM " + TB +" WHERE "+Col+"='"+val+"'");
+                this.PREPAREDST = CONNECTION.prepareStatement("SELECT " + Col + " FROM " + TB + " WHERE " + Col + "='" + val + "'");
                 this.RESULTS = PREPAREDST.executeQuery();
                 return RESULTS.next();
             }
@@ -278,14 +307,14 @@ public class DataBridge {
             }
         }
     }
-    
+
     public boolean AddData(String TB, List<String> data) throws SQLException {
         try {
             if (CONNECTION == null) {
                 Class.forName(DRIVER[TYPE]);
                 this.CONNECTION = DriverManager.getConnection(SOURCE, USER, PASS);
                 STATEMENT = CONNECTION.createStatement();
-                
+
                 ST = "INSERT INTO " + TB + " values('" + data.get(0) + "'";
                 for (int i = 1; i < data.size(); i++) {
                     ST = ST.concat(",'" + data.get(i) + "'");
@@ -548,7 +577,7 @@ public class DataBridge {
             System.out.println(er);
             return null;
         } finally {
-            if(tof != null){
+            if (tof != null) {
                 tof.close();
             }
         }

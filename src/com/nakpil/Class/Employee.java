@@ -15,6 +15,7 @@ public class Employee {
     
     private final String TRACE_ID;
     private String TIN_ID;
+    private String SSS_ID;
     private String Surname;
     private String Firstname;
     private String Middlename;
@@ -26,6 +27,7 @@ public class Employee {
     
     public static final String TABLE = "PROFILES";
     public static final String TRACE = "TRACE";
+    public static final String SSS = "SSS";
     public static final String TIN = "TIN";
     public static final String SURNAME = "SURNAME";
     public static final String FIRSTNAME = "FIRSTNAME";
@@ -41,6 +43,10 @@ public class Employee {
     
     public void setTIN(String s){
         this.TIN_ID = s;
+    }
+    
+    public void setSSS(String s){
+        this.SSS_ID = s;
     }
     
     public void setSurname(String s){
@@ -77,6 +83,10 @@ public class Employee {
     
     public String getTIN(){
         return TIN_ID;
+    }
+    
+    public String getSSS(){
+        return SSS_ID;
     }
     
     public String getSurname(){
@@ -120,7 +130,7 @@ public class Employee {
     }
     
     public String getEntry(){
-        return "INSERT INTO "+TABLE+" VALUES('"+this.TRACE_ID+"','"+this.TIN_ID+"','"+this.Surname+"','"
+        return "INSERT INTO "+TABLE+" VALUES('"+this.TRACE_ID+"','"+this.TIN_ID+"','"+this.SSS_ID+"','"+this.Surname+"','"
                 +this.Firstname+"','"+this.Middlename+"','"+this.Status+"','"+this.Birth+"','"+this.Contact
                 +"','"+this.Address+"')";
     }

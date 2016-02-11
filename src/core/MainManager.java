@@ -60,6 +60,7 @@ public class MainManager {
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
                 java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
+            TUNNEL.checkTable("");
             MainFrame MF = new MainFrame();
             MF.setVisible(true);
 
@@ -98,9 +99,9 @@ public class MainManager {
     public static void createDefaultConfig() throws IOException {
         try {
             FILE_HOLDER = new File(MainManager.ConfigFile);
-            TEMP_FILE = new File(MainManager.ConfigFile);
+            TEMP_FILE = new File(MainManager.ConfigFile+".tmp");
             if (!FILE_HOLDER.exists()) {
-                FILE_HOLDER.getParentFile().mkdirs();
+                FILE_HOLDER.getParentFile().mkdir();
                 FILE_HOLDER.createNewFile();
                 OutStream = new FileOutputStream(FILE_HOLDER);
                 Props = new Properties();
@@ -117,6 +118,8 @@ public class MainManager {
             if (OutStream != null) {
                 OutStream.flush();
                 OutStream.close();
+                FILE_HOLDER.delete();
+                TEMP_FILE.renameTo(FILE_HOLDER);
             }
         }
     }
