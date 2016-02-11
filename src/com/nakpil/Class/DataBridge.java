@@ -58,7 +58,7 @@ public class DataBridge {
     public final static int MSSQL = 2;
     public final static int H2 = 3;
 
-    public static final String DEFAULT = "jdbc:h2:tcp://localhost/~/Nakpil Softwares/BIR Alphalist/database";
+    public static final String DEFAULT = "jdbc:h2:tcp://localhost/split:30:/~/Nakpil Softwares/BIR Alphalist/database";
 
     private static final String DRIVER[] = {"sun.jdbc.odbc.JdbcOdbcDriver", "com.mysql.jdbc.Driver",
         "com.microsoft.sqlserver.jdbc.SQLServerDriver", "org.h2.Driver"};
@@ -99,7 +99,7 @@ public class DataBridge {
         this.PASS = p;
         this.TYPE = t;
         if (TYPE == H2) {
-            this.SOURCE = SOURCE + ";CIPHER=AES";
+            this.SOURCE = SOURCE + ";CIPHER=AES;MV_STORE=FALSE;MVCC=FALSE";
             this.PASS = "dwr2rufd7ezj " + PASS;
         }
     }
