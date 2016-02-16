@@ -9,15 +9,49 @@ package com.nakpil.Class;
  *
  * @author HERU
  */
-public class Account7_5 {
+public class Account75 {
     
-    private String Trace_ID;
+    private String Trace_ID,Tin_ID;
     private String Surname,Firstname,Middlename;
     private String NT_Gross,NT_Basic_SMW,NT_Holiday,NT_Overtime,NT_NightDif,NT_Hazard,NT_13th,NT_Demi,NT_SSS,NT_Salary,NT_Compen;
     private String T_Gross,T_Basic_SMW,T_Holiday,T_Overtime,T_NightDif,T_Hazard,T_13th,T_Demi,T_SSS,T_Salary,T_Compen;
     
-    public Account7_5(String trace){
+    public static final String TRACE = "TRACE";
+    public static final String TIN = "TIN";
+    public static final String SURNAME = "SURNAME";
+    public static final String FIRSTNAME = "FIRSTNAME";
+    public static final String MIDDLENAME = "MIDDLENAME";
+    public static final String NON_TAXABLE_GROSS = "NONTAXABLEGROSS";
+    public static final String NON_TAXABLE_BASIC_SMW = "NONTAXABLEBASICSMW";
+    public static final String NON_TAXABLE_HOLIDAY_PAY = "NONTAXABLEHOLIDAYPAY";
+    public static final String NON_TAXABLE_OVERTIME_PAY = "NONTAXABLEOVERTIMEPAY";
+    public static final String NON_TAXABLE_NIGHTDIFFENRENTIAL_PAY = "NONTAXABLENIGHTDIFFERENTIALPAY";
+    public static final String NON_TAXABLE_HAZARD_PAY = "NONTAXABLEHAZARDPAY";
+    public static final String NON_TAXABLE_13THMONTH_PAY = "NONTAXABLE13THMONTHPAY";
+    public static final String NON_TAXABLE_DEMINIMIS = "NONTAXABLEDEMINIMIS";
+    public static final String NON_TAXABLE_SSS = "NONTAXABLESSS";
+    public static final String NON_TAXABLE_SALARY = "NONTAXABLESALARY";
+    public static final String NON_TAXABLE_COMPENSATION = "NONTAXABLECOMPENSATION";
+    public static final String TAXABLE_GROSS = "TAXABLEGROSS";
+    public static final String TAXABLE_BASIC_SMW = "TAXABLEBASICSMW";
+    public static final String TAXABLE_HOLIDAY_PAY = "TAXABLEHOLIDAYPAY";
+    public static final String TAXABLE_OVERTIME_PAY = "TAXABLEOVERTIMEPAY";
+    public static final String TAXABLE_NIGHTDIFFENRENTIAL_PAY = "TAXABLENIGHTDIFFERENTIALPAY";
+    public static final String TAXABLE_HAZARD_PAY = "TAXABLEHAZARDPAY";
+    public static final String TAXABLE_13THMONTH_PAY = "TAXABLE13THMONTHPAY";
+    public static final String TAXABLE_DEMINIMIS = "TAXABLEDEMINIMIS";
+    public static final String TAXABLE_SSS = "TAXABLESSS";
+    public static final String TAXABLE_SALARY = "TAXABLESALARY";
+    public static final String TAXABLE_COMPENSATION = "TAXABLECOMPENSATION";
+    
+    public Account75(String trace){
         this.Trace_ID = trace;
+    }
+    public void setTin(String s){
+        this.Tin_ID = s;
+    }
+    public String getTin(){
+        return Tin_ID;
     }
     public void setTrace(String s){
         this.Trace_ID = s;
